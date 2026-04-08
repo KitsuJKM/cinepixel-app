@@ -1,24 +1,18 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
-// Configuración con SSL forzado para Render
+const isProduction = process.env.DB_HOST !== 'localhost';
+
 const pool = new Pool({
-    user: process.env.DB_USER,
-    host: process.env.DB_HOST,
-    database: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
-    port: process.env.DB_PORT || 5432,
-    ssl: {
-        rejectUnauthorized: false // Necesario para bases de datos gratuitas en Render/Heroku
-    }
-});
-
-pool.on('connect', () => {
-    console.log('🐘 Conectado exitosamente a la base de datos en Render');
-});
-
-pool.on('error', (err) => {
-    console.error('❌ Error inesperado en el pool de PostgreSQL:', err);
+    connectionString: isProduction 
+        ? `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`
+        : undefined, // En local usará las variables normales
+    user: isProduction ? undefined : process.env.DB_USER,
+    host: isProduction ? undefined : process.env.DB_HOST,
+    database: isProduction ? undefined : process.env.DB_NAME,
+    password: isProduction ? undefined : process.env.DB_PASSWORD,
+    port: isProduction ? undefined : (process.env.DB_PORT || 5432),
+    ssl: isProduction ? { rejectUnauthorized: false } : false
 });
 
 module.exports = {
