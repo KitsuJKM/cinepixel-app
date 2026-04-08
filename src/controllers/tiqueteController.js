@@ -2,8 +2,8 @@ const db = require('../models/db');
 const QRCode = require('qrcode');
 const crypto = require('crypto');
 
-// 1. OBTENER ASIENTOS OCUPADOS (Para pintar el mapa)
-const obtenerOcupadosLogic = async (req, res) => {
+// 1. Obtener Asientos Ocupados
+exports.obtenerOcupados = async (req, res) => {
     try {
         const { peli_id } = req.query;
         const query = `
@@ -21,12 +21,8 @@ const obtenerOcupadosLogic = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
-// Exportamos con ambos nombres posibles por si en tus rutas usaste getOcupados u obtenerOcupados
-exports.obtenerOcupados = obtenerOcupadosLogic;
-exports.getOcupados = obtenerOcupadosLogic;
 
-
-// 2. VALIDAR TIQUETE (Para el panel de Admin)
+// 2. Validar Tiquete (Panel Admin)
 exports.validarTiquete = async (req, res) => {
     try {
         const { codigo } = req.body;
@@ -42,7 +38,6 @@ exports.validarTiquete = async (req, res) => {
             return res.json({ status: 'Usado', mensaje: 'Este tiquete ya fue validado anteriormente.' });
         }
         
-        // Si es válido, lo marcamos como usado
         await db.query('UPDATE tiquetes SET estado = $1 WHERE id = $2', ['usado', tiquete.id]);
         res.json({ status: 'Válido', mensaje: 'Ingreso autorizado. Tiquete marcado como usado.' });
         
@@ -52,8 +47,7 @@ exports.validarTiquete = async (req, res) => {
     }
 };
 
-
-// 3. COMPRAR TIQUETE (Rápido, sin correos, QR instantáneo)
+// 3. Comprar Tiquete (Solo QR, Sin correo)
 exports.comprarTiquete = async (req, res) => {
     const { pelicula_id, asientos, usuario_id } = req.body; 
     const codigo_unico = crypto.randomUUID();
