@@ -31,7 +31,7 @@
         .login-tabs span { cursor: pointer; color: var(--text-muted); padding-bottom: 5px; transition: all 0.3s;}
         .login-tabs span.active { color: white; border-bottom: 1px solid var(--accent-gold); }
         .input-group { margin-bottom: 25px; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 5px; }
-        .login-input { background: transparent; border: none; color: white; width: 100%; font-size: 0.9rem; outline: none; }
+        .login-input { background: transparent; border: none; color: white; width: 100%; font-size: 0.9rem; outline: none; font-family: 'Inter', sans-serif; }
         .input-admin { border: 1px solid rgba(255,255,255,0.2); padding: 10px; margin-bottom: 12px; border-radius: 5px; color: white; background: rgba(0,0,0,0.3);}
         .btn-continuar { background: transparent; border: 1px solid var(--accent-gold); color: white; width: 100%; padding: 12px; border-radius: 25px; cursor: pointer; transition: all 0.3s; box-shadow: 0 0 15px rgba(229, 192, 123, 0.2); display: flex; justify-content: center; align-items: center; gap: 10px; }
         .btn-continuar:hover { background: var(--accent-gold); color: black; box-shadow: 0 0 25px rgba(229, 192, 123, 0.6); }
@@ -67,9 +67,66 @@
         <div class="movies-grid" id="contenedor-peliculas"><p style="color: var(--text-muted);">Cargando cartelera...</p></div>
     </main>
 
-    <div class="modal-overlay" id="modal-login"><div class="login-box"><div class="cerrar-modal" id="btn-cerrar-login">✕</div><div class="login-tabs"><span class="active" id="tab-login">INICIAR SESIÓN</span><span id="tab-registro">REGISTRARSE</span></div><form id="form-login"><div class="input-group" id="grupo-nombre" style="display: none;"><span>👤</span><input type="text" id="login-nombre" class="login-input" placeholder="Tu Nombre Completo"></div><div class="input-group"><span>✉️</span><input type="email" id="login-email" class="login-input" placeholder="Correo Electrónico" required></div><div class="input-group"><span>🔒</span><input type="password" id="login-password" class="login-input" placeholder="Contraseña" required></div><button type="submit" class="btn-continuar" id="btn-submit-auth">*CONTINUAR →</button></form></div></div>
-    <div class="modal-overlay" id="modal-admin-pelicula"><div class="login-box" style="max-width: 550px;"><div class="cerrar-modal" id="btn-cerrar-admin">✕</div><h2 id="titulo-modal-admin" style="color: #e5c07b; margin-top: 0; font-family: 'Playfair Display', serif; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">Nueva Película</h2><form id="form-admin-pelicula" style="display: flex; flex-direction: column;" enctype="multipart/form-data"><input type="hidden" id="admin-peli-id"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Título</label><input type="text" id="admin-titulo" class="login-input input-admin" required><div style="display: flex; gap: 15px;"><div style="flex: 1; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Género</label><input type="text" id="admin-genero" class="login-input input-admin" required></div><div style="flex: 1; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Duración (min)</label><input type="number" id="admin-duracion" class="login-input input-admin" required></div></div><div style="display: flex; gap: 15px;"><div style="flex: 1; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Fecha Estreno</label><input type="date" id="admin-fecha-estreno" class="login-input input-admin"></div><div style="flex: 1; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Fecha Fin</label><input type="date" id="admin-fecha-fin" class="login-input input-admin"></div></div><div style="display: flex; gap: 15px; align-items: center; margin-bottom: 10px;"><div style="flex: 2; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Subir Portada</label><input type="file" id="admin-imagen" class="login-input input-admin" accept="image/*"></div><div style="flex: 1; display: flex; flex-direction: column;" id="box-estado"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Estado</label><select id="admin-estado" class="login-input input-admin"><option value="true">Activa</option><option value="false">Finalizada</option></select></div></div><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Descripción</label><textarea id="admin-descripcion" class="login-input input-admin" style="min-height: 50px;"></textarea><button type="submit" class="btn-continuar" id="btn-submit-pelicula" style="background: #28a745; border-color: #28a745; color: white; margin-top: 10px;">GUARDAR PELÍCULA</button></form></div></div>
-    <div class="modal-overlay" id="modal-validar-tiquete"><div class="login-box" style="max-width: 450px; text-align: center;"><div class="cerrar-modal" id="btn-cerrar-validar">✕</div><h2 style="color: #ffc107; margin-top: 0; font-family: 'Playfair Display', serif; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">Validar Ingreso</h2><form id="form-validar-tiquete"><input type="text" id="input-codigo-tiquete" class="login-input input-admin" placeholder="Código de tiquete" required style="text-align: center;"><button type="submit" class="btn-continuar" id="btn-submit-validar" style="background: #ffc107; border-color: #ffc107; color: black; margin-top: 15px;">VERIFICAR TIQUETE</button></form><div id="resultado-validacion" style="margin-top: 25px; padding: 15px; border-radius: 5px; display: none; color: white;"><span id="resultado-status" style="display: block; font-size: 1.5rem; font-family: 'Playfair Display', serif;"></span><span id="resultado-mensaje" style="font-size: 0.85rem;"></span></div></div></div>
+    <div class="modal-overlay" id="modal-login">
+        <div class="login-box">
+            <div class="cerrar-modal" id="btn-cerrar-login">✕</div>
+            <div class="login-tabs">
+                <span class="active" id="tab-login">INICIAR SESIÓN</span>
+                <span id="tab-registro">REGISTRARSE</span>
+            </div>
+            <form id="form-login">
+                <div class="input-group" id="grupo-nombre" style="display: none;">
+                    <span>👤</span>
+                    <input type="text" id="login-nombre" class="login-input" placeholder="Tu Nombre Completo">
+                </div>
+                <div class="input-group">
+                    <span>✉️</span>
+                    <input type="email" id="login-email" class="login-input" placeholder="Correo Electrónico" required>
+                </div>
+                <div class="input-group">
+                    <span>🔒</span>
+                    <input type="password" id="login-password" class="login-input" placeholder="Contraseña" required>
+                </div>
+                <button type="submit" class="btn-continuar" id="btn-submit-auth">*CONTINUAR →</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-admin-pelicula">
+        <div class="login-box" style="max-width: 550px;">
+            <div class="cerrar-modal" id="btn-cerrar-admin">✕</div>
+            <h2 id="titulo-modal-admin" style="color: #e5c07b; margin-top: 0; font-family: 'Playfair Display', serif; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">Nueva Película</h2>
+            <form id="form-admin-pelicula" style="display: flex; flex-direction: column;" enctype="multipart/form-data">
+                <input type="hidden" id="admin-peli-id">
+                <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Título</label>
+                <input type="text" id="admin-titulo" class="login-input input-admin" required>
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Género</label><input type="text" id="admin-genero" class="login-input input-admin" required></div>
+                    <div style="flex: 1; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Duración (min)</label><input type="number" id="admin-duracion" class="login-input input-admin" required></div>
+                </div>
+                <div style="display: flex; gap: 15px;">
+                    <div style="flex: 1; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Fecha Estreno</label><input type="date" id="admin-fecha-estreno" class="login-input input-admin"></div>
+                    <div style="flex: 1; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Fecha Fin</label><input type="date" id="admin-fecha-fin" class="login-input input-admin"></div>
+                </div>
+                <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 10px;">
+                    <div style="flex: 2; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Subir Portada</label><input type="file" id="admin-imagen" class="login-input input-admin" accept="image/*"></div>
+                    <div style="flex: 1; display: flex; flex-direction: column;" id="box-estado"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Estado</label><select id="admin-estado" class="login-input input-admin"><option value="true">Activa</option><option value="false">Finalizada</option></select></div>
+                </div>
+                <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Descripción</label><textarea id="admin-descripcion" class="login-input input-admin" style="min-height: 50px;"></textarea>
+                <button type="submit" class="btn-continuar" id="btn-submit-pelicula" style="background: #28a745; border-color: #28a745; color: white; margin-top: 10px;">GUARDAR PELÍCULA</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal-validar-tiquete">
+        <div class="login-box" style="max-width: 450px; text-align: center;">
+            <div class="cerrar-modal" id="btn-cerrar-validar">✕</div>
+            <h2 style="color: #ffc107; margin-top: 0; font-family: 'Playfair Display', serif; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">Validar Ingreso</h2>
+            <form id="form-validar-tiquete"><input type="text" id="input-codigo-tiquete" class="login-input input-admin" placeholder="Código de tiquete" required style="text-align: center;"><button type="submit" class="btn-continuar" id="btn-submit-validar" style="background: #ffc107; border-color: #ffc107; color: black; margin-top: 15px;">VERIFICAR TIQUETE</button></form>
+            <div id="resultado-validacion" style="margin-top: 25px; padding: 15px; border-radius: 5px; display: none; color: white;"><span id="resultado-status" style="display: block; font-size: 1.5rem; font-family: 'Playfair Display', serif;"></span><span id="resultado-mensaje" style="font-size: 0.85rem;"></span></div>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="custom-alert-modal" style="z-index: 9999;"><div class="custom-alert-box"><h3 id="alert-title" class="custom-alert-title">Aviso</h3><p id="alert-message" class="custom-alert-text"></p><button id="btn-alert-ok" class="btn-continuar">ACEPTAR</button></div></div>
     <div class="modal-overlay" id="custom-confirm-modal" style="z-index: 9999;"><div class="custom-alert-box"><h3 id="confirm-title" class="custom-alert-title">Confirmación</h3><p id="confirm-message" class="custom-alert-text"></p><div style="display: flex; gap: 15px;"><button id="btn-confirm-cancel" class="btn-continuar" style="border-color: #dc3545; color: #dc3545;">CANCELAR</button><button id="btn-confirm-ok" class="btn-continuar" style="border-color: #28a745; color: #28a745;">ACEPTAR</button></div></div></div>
 
@@ -83,6 +140,7 @@
             const selectOrden = document.getElementById('filtro-orden');
             let todasLasPeliculas = []; 
             let esAdminLogueado = false;
+            let esRegistro = false;
 
             window.eliminarPelicula = async (id, evento) => {
                 evento.stopPropagation(); 
@@ -151,7 +209,6 @@
             const btnAbrirLogin = document.getElementById('btn-abrir-login');
             const btnAdminAgregar = document.getElementById('btn-admin-agregar');
             const btnAdminValidar = document.getElementById('btn-admin-validar');
-            let esRegistro = false;
 
             const verificarSesion = () => {
                 const u = JSON.parse(localStorage.getItem('cinepixel_user'));
@@ -168,21 +225,34 @@
             };
             verificarSesion();
 
+            document.getElementById('tab-registro').addEventListener('click', (e) => {
+                esRegistro = true; e.target.classList.add('active'); document.getElementById('tab-login').classList.remove('active');
+                document.getElementById('grupo-nombre').style.display = 'flex'; document.getElementById('login-nombre').required = true;
+                document.getElementById('btn-submit-auth').innerText = 'CREAR CUENTA →';
+            });
+            document.getElementById('tab-login').addEventListener('click', (e) => {
+                esRegistro = false; e.target.classList.add('active'); document.getElementById('tab-registro').classList.remove('active');
+                document.getElementById('grupo-nombre').style.display = 'none'; document.getElementById('login-nombre').required = false;
+                document.getElementById('btn-submit-auth').innerText = '*CONTINUAR →';
+            });
+
             btnAbrirLogin.addEventListener('click', async () => {
                 if (!localStorage.getItem('cinepixel_user')) modalLogin.style.display = 'flex';
-                else if(await mostrarConfirmacion("¿Cerrar sesión?")) { localStorage.removeItem('cinepixel_user'); verificarSesion(); }
+                else if(await mostrarConfirmacion("¿Deseas cerrar sesión de forma segura?", "Cerrar Sesión")) { localStorage.removeItem('cinepixel_user'); verificarSesion(); }
             });
             document.getElementById('btn-cerrar-login').addEventListener('click', () => modalLogin.style.display = 'none');
 
             document.getElementById('form-login').addEventListener('submit', async (e) => {
                 e.preventDefault();
+                const btn = document.getElementById('btn-submit-auth');
+                btn.disabled = true;
                 const body = esRegistro ? { nombre: document.getElementById('login-nombre').value, email: document.getElementById('login-email').value, password: document.getElementById('login-password').value } : { email: document.getElementById('login-email').value, password: document.getElementById('login-password').value };
                 try {
                     const res = await fetch(esRegistro ? '/usuarios/registro' : '/usuarios/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
                     const data = await res.json();
-                    if(res.ok) { localStorage.setItem('cinepixel_user', JSON.stringify(data.usuario)); modalLogin.style.display = 'none'; verificarSesion(); }
+                    if(res.ok) { localStorage.setItem('cinepixel_user', JSON.stringify(data.usuario)); modalLogin.style.display = 'none'; await mostrarAlerta(esRegistro ? "Cuenta creada" : "Bienvenido"); verificarSesion(); }
                     else await mostrarAlerta(data.error);
-                } catch (e) { await mostrarAlerta("Error de servidor"); }
+                } catch (e) { await mostrarAlerta("Error de servidor"); } finally { btn.disabled = false; }
             });
 
             const modalAdmin = document.getElementById('modal-admin-pelicula');
@@ -192,7 +262,7 @@
             document.getElementById('form-admin-pelicula').addEventListener('submit', async (e) => {
                 e.preventDefault();
                 const id = document.getElementById('admin-peli-id').value;
-                const fd = new FormData(e.target);
+                const fd = new FormData();
                 fd.append('titulo', document.getElementById('admin-titulo').value);
                 fd.append('genero', document.getElementById('admin-genero').value);
                 fd.append('duracion', document.getElementById('admin-duracion').value);
@@ -205,7 +275,7 @@
 
                 try {
                     const res = await fetch(id ? `/peliculas/${id}` : '/peliculas', { method: id ? 'PUT' : 'POST', body: fd });
-                    if(res.ok) { modalAdmin.style.display = 'none'; await mostrarAlerta("Éxito"); cargarCartelera(); }
+                    if(res.ok) { modalAdmin.style.display = 'none'; await mostrarAlerta("Película guardada"); cargarCartelera(); }
                     else await mostrarAlerta("Error al guardar");
                 } catch (e) { await mostrarAlerta("Error de red"); }
             });
