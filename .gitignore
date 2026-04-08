@@ -1,0 +1,13 @@
+# Dependencias de Node
+node_modules/
+
+# Archivo de variables de entorno (Contraseñas secretas)
+.env
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# No subir las imágenes de prueba que subiste localmente
+public/uploads/*
+!public/uploads/.gitkeep
