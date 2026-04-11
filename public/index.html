@@ -42,7 +42,7 @@
 </head>
 <body>
     <header class="header-cine">
-        <div class="logo-container">
+        <div class="logo-container" onclick="location.reload()" style="cursor:pointer">
             <div style="background: white; color: black; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: sans-serif;">P</div>
             CinePixel
         </div>
@@ -96,23 +96,42 @@
         <div class="login-box" style="max-width: 550px;">
             <div class="cerrar-modal" id="btn-cerrar-admin">✕</div>
             <h2 id="titulo-modal-admin" style="color: #e5c07b; margin-top: 0; font-family: 'Playfair Display', serif; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;">Nueva Película</h2>
-            <form id="form-admin-pelicula" style="display: flex; flex-direction: column;" enctype="multipart/form-data">
+            
+            <form id="form-admin-pelicula" style="display: flex; flex-direction: column;">
                 <input type="hidden" id="admin-peli-id">
                 <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Título</label>
                 <input type="text" id="admin-titulo" class="login-input input-admin" required>
+                
                 <div style="display: flex; gap: 15px;">
                     <div style="flex: 1; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Género</label><input type="text" id="admin-genero" class="login-input input-admin" required></div>
                     <div style="flex: 1; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Duración (min)</label><input type="number" id="admin-duracion" class="login-input input-admin" required></div>
                 </div>
+                
                 <div style="display: flex; gap: 15px;">
                     <div style="flex: 1; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Fecha Estreno</label><input type="date" id="admin-fecha-estreno" class="login-input input-admin"></div>
                     <div style="flex: 1; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Fecha Fin</label><input type="date" id="admin-fecha-fin" class="login-input input-admin"></div>
                 </div>
+                
                 <div style="display: flex; gap: 15px; align-items: center; margin-bottom: 10px;">
-                    <div style="flex: 2; display: flex; flex-direction: column;"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Subir Portada</label><input type="file" id="admin-imagen" class="login-input input-admin" accept="image/*"></div>
-                    <div style="flex: 1; display: flex; flex-direction: column;" id="box-estado"><label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Estado</label><select id="admin-estado" class="login-input input-admin"><option value="true">Activa</option><option value="false">Finalizada</option></select></div>
+                    <div style="flex: 2; display: flex; flex-direction: column;">
+                        <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">URL de la Portada</label>
+                        <input type="url" id="admin-imagen" class="login-input input-admin" placeholder="https://ejemplo.com/poster.jpg" required>
+                    </div>
+                    
+                    <img id="preview-portada" src="" style="width: 50px; height: 70px; object-fit: cover; border-radius: 5px; display: none; border: 1px solid rgba(255,255,255,0.2);">
+                    
+                    <div style="flex: 1; display: flex; flex-direction: column; display: none;" id="box-estado">
+                        <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Estado</label>
+                        <select id="admin-estado" class="login-input input-admin">
+                            <option value="true">Activa</option>
+                            <option value="false">Finalizada</option>
+                        </select>
+                    </div>
                 </div>
-                <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Descripción</label><textarea id="admin-descripcion" class="login-input input-admin" style="min-height: 50px;"></textarea>
+                
+                <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">Descripción</label>
+                <textarea id="admin-descripcion" class="login-input input-admin" style="min-height: 50px;"></textarea>
+                
                 <button type="submit" class="btn-continuar" id="btn-submit-pelicula" style="background: #28a745; border-color: #28a745; color: white; margin-top: 10px;">GUARDAR PELÍCULA</button>
             </form>
         </div>
@@ -153,10 +172,12 @@
                 }
             };
 
+            // ---- CORRECCIÓN APLICADA AQUÍ: CARGA CORRECTA DE LA URL AL EDITAR ----
             window.abrirEditarPelicula = (id, evento) => {
                 evento.stopPropagation();
                 const peli = todasLasPeliculas.find(p => p.id === id);
                 if(!peli) return;
+                
                 document.getElementById('titulo-modal-admin').innerText = "Editar Película";
                 document.getElementById('admin-peli-id').value = peli.id;
                 document.getElementById('admin-titulo').value = peli.titulo;
@@ -165,6 +186,21 @@
                 document.getElementById('admin-descripcion').value = peli.descripcion || '';
                 document.getElementById('admin-fecha-estreno').value = peli.fecha_estreno ? peli.fecha_estreno.split('T')[0] : '';
                 document.getElementById('admin-fecha-fin').value = peli.fecha_fin ? peli.fecha_fin.split('T')[0] : '';
+                
+                // Asignar el valor de la URL al input
+                const inputImg = document.getElementById('admin-imagen');
+                inputImg.value = peli.imagen_url || '';
+                
+                // Asignar la imagen a la vista previa
+                const preview = document.getElementById('preview-portada');
+                if(peli.imagen_url) {
+                    preview.src = peli.imagen_url;
+                    preview.style.display = 'block';
+                } else {
+                    preview.src = '';
+                    preview.style.display = 'none';
+                }
+
                 document.getElementById('admin-estado').value = peli.estado ? "true" : "false";
                 document.getElementById('box-estado').style.display = 'flex'; 
                 document.getElementById('modal-admin-pelicula').style.display = 'flex';
@@ -256,28 +292,70 @@
             });
 
             const modalAdmin = document.getElementById('modal-admin-pelicula');
-            btnAdminAgregar.addEventListener('click', () => { document.getElementById('titulo-modal-admin').innerText = "Nueva Película"; document.getElementById('form-admin-pelicula').reset(); document.getElementById('admin-peli-id').value = ''; document.getElementById('box-estado').style.display = 'none'; modalAdmin.style.display = 'flex'; });
+            btnAdminAgregar.addEventListener('click', () => { 
+                document.getElementById('titulo-modal-admin').innerText = "Nueva Película"; 
+                document.getElementById('form-admin-pelicula').reset(); 
+                document.getElementById('admin-peli-id').value = ''; 
+                document.getElementById('preview-portada').src = '';
+                document.getElementById('preview-portada').style.display = 'none';
+                document.getElementById('box-estado').style.display = 'none'; 
+                modalAdmin.style.display = 'flex'; 
+            });
             document.getElementById('btn-cerrar-admin').addEventListener('click', () => modalAdmin.style.display = 'none');
 
+            // PREVISUALIZACIÓN DE IMAGEN URL EN TIEMPO REAL
+            document.getElementById('admin-imagen').addEventListener('input', (e) => {
+                const preview = document.getElementById('preview-portada');
+                if(e.target.value) {
+                    preview.src = e.target.value;
+                    preview.style.display = 'block';
+                } else {
+                    preview.src = '';
+                    preview.style.display = 'none';
+                }
+            });
+
+            // ---- CORRECCIÓN APLICADA AQUÍ: LECTURA CORRECTA AL GUARDAR ----
             document.getElementById('form-admin-pelicula').addEventListener('submit', async (e) => {
                 e.preventDefault();
+                const btnSubmit = document.getElementById('btn-submit-pelicula');
+                btnSubmit.disabled = true;
+                btnSubmit.innerText = "GUARDANDO...";
+
                 const id = document.getElementById('admin-peli-id').value;
-                const fd = new FormData();
-                fd.append('titulo', document.getElementById('admin-titulo').value);
-                fd.append('genero', document.getElementById('admin-genero').value);
-                fd.append('duracion', document.getElementById('admin-duracion').value);
-                fd.append('fecha_estreno', document.getElementById('admin-fecha-estreno').value);
-                fd.append('fecha_fin', document.getElementById('admin-fecha-fin').value);
-                fd.append('descripcion', document.getElementById('admin-descripcion').value);
-                if(id) fd.append('estado', document.getElementById('admin-estado').value);
-                const file = document.getElementById('admin-imagen').files[0];
-                if(file) fd.append('portada', file);
+                
+                const bodyData = {
+                    titulo: document.getElementById('admin-titulo').value,
+                    genero: document.getElementById('admin-genero').value,
+                    duracion: document.getElementById('admin-duracion').value,
+                    fecha_estreno: document.getElementById('admin-fecha-estreno').value,
+                    fecha_fin: document.getElementById('admin-fecha-fin').value,
+                    descripcion: document.getElementById('admin-descripcion').value,
+                    imagen_url: document.getElementById('admin-imagen').value // <-- Aseguramos que se envíe este dato
+                };
+                
+                if(id) bodyData.estado = document.getElementById('admin-estado').value;
 
                 try {
-                    const res = await fetch(id ? `/peliculas/${id}` : '/peliculas', { method: id ? 'PUT' : 'POST', body: fd });
-                    if(res.ok) { modalAdmin.style.display = 'none'; await mostrarAlerta("Película guardada"); cargarCartelera(); }
-                    else await mostrarAlerta("Error al guardar");
-                } catch (e) { await mostrarAlerta("Error de red"); }
+                    const res = await fetch(id ? `/peliculas/${id}` : '/peliculas', { 
+                        method: id ? 'PUT' : 'POST', 
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(bodyData)
+                    });
+                    
+                    if(res.ok) { 
+                        modalAdmin.style.display = 'none'; 
+                        await mostrarAlerta("Película guardada correctamente"); 
+                        cargarCartelera(); 
+                    } else { 
+                        await mostrarAlerta("Error al guardar"); 
+                    }
+                } catch (e) { 
+                    await mostrarAlerta("Error de red"); 
+                } finally {
+                    btnSubmit.disabled = false;
+                    btnSubmit.innerText = "GUARDAR PELÍCULA";
+                }
             });
 
             const modalVal = document.getElementById('modal-validar-tiquete');
@@ -293,7 +371,7 @@
                     document.getElementById('resultado-status').innerText = d.status;
                     document.getElementById('resultado-mensaje').innerText = d.mensaje;
                     r.style.background = d.status === 'Válido' ? 'rgba(40,167,69,0.2)' : (d.status === 'Usado' ? 'rgba(255,193,7,0.2)' : 'rgba(220,53,69,0.2)');
-                } catch (e) { await mostrarAlerta("Error"); }
+                } catch (e) { await mostrarAlerta("Error al validar"); }
             });
         });
     </script>
